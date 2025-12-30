@@ -47,7 +47,7 @@ const drawSnake = () => {
 
 const drawFood = () => {
     const { x, y, foodImage} = food;
-    // Prevent drawImage from throwing if the image hasn't loaded (or failed to load).
+    // Prevent drawImage from throwing if the image failed to loaded.
     if (!foodImage.complete || foodImage.naturalWidth === 0) {
         ctx.fillStyle = "#DE802B";
         ctx.fillRect(x, y, 30, 30);
