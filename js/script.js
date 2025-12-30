@@ -4,11 +4,14 @@ const gameResult = document.querySelector(".gameResult");
 const btnReset = document.querySelector(".btnReset");
 const dialog = document.querySelector("dialog");
 const ctx = canvas.getContext("2d");
-const audio = new Audio("../assets/bite-audio.mp3")
+// NOTE: Paths in JS like "./images/..." resolve relative to the *page* (index.html),
+// not this file. 
+// Since index.html sits at the project root, we should not use "../".
+const audio = new Audio("./assets/bite-audio.mp3");
+const foodImage = new Image();
+foodImage.src = "./images/apple.png";
 const sizeBlock = 30;
 const sizeCanvas = canvas.width;
-const foodImage = new Image();
-foodImage.src = "../images/apple.png";
 let direction, currentScore;
 
 const randomNumber = (max) => {
@@ -44,7 +47,15 @@ const drawSnake = () => {
 
 const drawFood = () => {
     const { x, y, foodImage} = food;
+    // Prevent drawImage from throwing if the image hasn't loaded (or failed to load).
+    if (!foodImage.complete || foodImage.naturalWidth === 0) {
+        ctx.fillStyle = "#DE802B";
+        ctx.fillRect(x, y, 30, 30);
+        return;
+    }
+
     ctx.drawImage(foodImage, x, y, 30, 30);
+
 }
 
 const drawGrid = () => {
