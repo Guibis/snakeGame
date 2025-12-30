@@ -54,6 +54,9 @@ canvas{
 dialog {
     color: var(--dangerColor);
     background-color: var(--neutroColor1);
+    display: none;
+    flex-direction: column;
+    align-items: center;
     position: fixed;
     z-index: 2;
     inset: 0;
@@ -63,5 +66,89 @@ dialog {
     border: 5px double var(--neutroColor2);
     text-align: center;
     box-shadow: 5px 5px var(--neutroColor2);
-    line-height: 1.5;
+    line-height: 2;
+}
+
+.btnReset{
+    background-color: var(--primaryColor);
+    color: var(--neutroColor2);
+    padding: 8px;
+    margin-top: 15px;
+    width: 150px;
+    cursor: pointer;
+    border-style: none;
+    border-radius: 20px;
+    border-color: var(--neutroColor2);
+    &:hover {
+        transform: translateY(-0.25em);
+        box-shadow: 0 0 0.5em 0em var(--primaryColor);
+        border-color: var(--primaryColor);
+        color: var(--neutroColor2);
+    }
+}
+
+.btnReset:hover{
+    background-color: #475a27;
+}
+
+
+@media(max-width: 647px) {
+    canvas{
+        width: 300px;
+    }
+     .menuScore{
+    width: 290px;
+    }
+    .title{
+        font-size: 1.2em;
+    }
+    .score{
+        font-size: 0.8em;
+    }
+    dialog{
+        padding: 20px;
+        border-radius: 5px;
+    }
+    dialog h3{
+        font-size: 0.9em;
+    }
+    .gameResult{
+        font-size: 0.7em;
+    }
+    .btnReset{
+        padding: 5px;
+        width: 100px;
+        border-radius: 20px;
+        font-size: 0.6em;
+    } 
+}
+@media(min-width: 2000px) {
+    canvas{
+        width: 1200px;
+    }
+    .menuScore{
+        width: 1100px;
+    }
+    .title{
+        font-size: 5em;
+    }
+    .score{
+        font-size: 2.4em;
+    }
+    dialog{
+        padding: 130px;
+        border-radius: 40px;
+    }
+    dialog h3{
+        font-size: 3.3em;
+    }
+    .gameResult{
+        font-size: 2em;
+    }
+    .btnReset{
+        padding: 30px;
+        width: 300px;
+        border-radius: 40px;
+        font-size: 1.7em;
+    }
 }
