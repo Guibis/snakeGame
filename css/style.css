@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Kablammo&display=swap');
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "Chakra Petch", sans-serif;
+}
+
+:root{
+    --primaryColor: #556B2F;
+    --secondaryColor: #C5D89D;
+    --dangerColor: #DE802B;
+    --neutroColor1: #061E29;
+    --neutroColor2: #F5F2F2;
+    --snakeColor: linear-gradient(#556B2F,#8FA31E);
+}
+
+body{
+    background-image: url(../images/bg.jpg);
+    background-size: cover;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    color: var(--neutroColor2);
+}
+
+canvas{
+    margin-top: 10px;
+    border: 4px solid var(--primaryColor);
+    background-color: var(--secondaryColor);
+}
+
+.menuScore {
+    width: 638px;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.score {
+    margin-right: auto;
+}
+
+.title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+dialog {
+    color: var(--dangerColor);
+    background-color: var(--neutroColor1);
+    position: fixed;
+    z-index: 2;
+    inset: 0;
+    margin: auto auto;
+    padding: 30px;
+    border-radius: 20px;
+    border: 5px double var(--neutroColor2);
+    text-align: center;
+    box-shadow: 5px 5px var(--neutroColor2);
+    line-height: 1.5;
+}
