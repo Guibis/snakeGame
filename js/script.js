@@ -4,14 +4,22 @@ const gameResult = document.querySelector(".gameResult");
 const btnReset = document.querySelector(".btnReset");
 const dialog = document.querySelector("dialog");
 const ctx = canvas.getContext("2d");
-// NOTE: Paths in JS like "./images/..." resolve relative to the *page* (index.html),
-// not this file. Since index.html sits at the project root, we should not use "../".
-const audio = new Audio("./assets/bite-audio.mp3");
-const foodImage = new Image();
-foodImage.src = "./images/apple.png";
+const audio = new Audio("./assets/bite-audio.mp3")
 const sizeBlock = 30;
 const sizeCanvas = canvas.width;
-let direction, currentScore;
+const foodImage = new Image();
+foodImage.src = "./images/apple.png";
+let direction = "", nextDirection = "", currentScore;
+
+const reset = () => {
+    scoreValue.innerHTML = "00";
+    dialog.style.display = ("none");
+    snake = [initialPosition];
+    direction = "";
+    gameLoading();
+};
+
+btnReset.addEventListener("click", reset);
 
 const randomNumber = (max) => {
     return Math.floor(Math.random() * max);
@@ -46,15 +54,7 @@ const drawSnake = () => {
 
 const drawFood = () => {
     const { x, y, foodImage} = food;
-    // Prevent drawImage from throwing if the image failed to loaded.
-    if (!foodImage.complete || foodImage.naturalWidth === 0) {
-        ctx.fillStyle = "#DE802B";
-        ctx.fillRect(x, y, 30, 30);
-        return;
-    }
-
     ctx.drawImage(foodImage, x, y, 30, 30);
-
 }
 
 const drawGrid = () => {
@@ -80,11 +80,6 @@ const drawGrid = () => {
 const moveSnake = () => {
     if(!direction) return;
     const head = snake.at(-1);
-    
-    if(snake.length == 1){
-        snake.unshift(snake.at(0));
-        snake.unshift(snake.at(1));
-    }
 
     if(direction == "right") {
         snake.push({x: head.x + sizeBlock, y: head.y});
@@ -107,22 +102,25 @@ const scoreIncrement = () => {
 }
 
 const showDialog = () => {
-    gameResult.innerHTML = `You lose the game, your score was: ${String(currentScore).padStart(2, "0")}`;
-    dialog.show();
+    dialog.style.display = ("flex");
+    gameResult.innerHTML = `You lose the game, your score was: ${scoreValue.innerHTML}`;
 };
 
 document.addEventListener("keydown", ({ key }) =>{
-    if(key == "ArrowUp" && direction != "down" || key == "w" && direction != "down"){
-        direction = "up";
+    if (key === "ArrowUp" || key === "w") {
+        if (direction !== "down") nextDirection = "up";
     }
-    if(key == "ArrowRight" && direction != "left" || key == "d" && direction != "left"){
-        direction = "right";
+
+    if (key === "ArrowRight" || key === "d") {
+        if (direction !== "left") nextDirection = "right";
     }
-    if(key == "ArrowDown" && direction != "up" || key == "s" && direction != "up"){
-        direction = "down";
+
+    if (key === "ArrowDown" || key === "s") {
+        if (direction !== "up") nextDirection = "down";
     }
-    if(key == "ArrowLeft" && direction != "right" || key == "a" && direction != "right"){
-        direction = "left";
+
+    if (key === "ArrowLeft" || key === "a") {
+        if (direction !== "right") nextDirection = "left";
     }
 });
 
@@ -146,37 +144,60 @@ const checkEat = () => {
     }
 };
 
-const checkContact = () => {
-    snake.forEach((parts) =>{
-        
-    })
-};
-
 const checkCollision = () => {
     const head = snake.at(-1);
 
-    const wallCollision = head.x < 0 || head.x > sizeCanvas - 30 
-    || head.y < 0 || head.y > sizeCanvas - 30;
+    const hitLeft = head.x < 0;
+    const hitRight = head.x > sizeCanvas - sizeBlock;
+    const hitTop = head.y < 0;
+    const hitBottom = head.y > sizeCanvas - sizeBlock;
 
     const selfCollision = snake.find((position, index) => {
-        return index < snake.length-2 && position.x == head.x && position.y == head.y
+        return index < snake.length - 2 &&
+               position.x === head.x &&
+               position.y === head.y;
     });
 
-    if(wallCollision || selfCollision){
+    if (hitLeft){
+        head.x = sizeCanvas - sizeBlock;
+        ctx.clearRect(0, 0, sizeCanvas, sizeCanvas);
+        drawGrid();
+        drawFood();
+        drawSnake();
+    } 
+
+    if (hitRight){
+        head.x = 0;
+        ctx.clearRect(0, 0, sizeCanvas, sizeCanvas);
+        drawGrid();
+        drawFood();
+        drawSnake();
+    } 
+
+    if (hitTop){
+        head.y = sizeCanvas - sizeBlock;
+        ctx.clearRect(0, 0, sizeCanvas, sizeCanvas);
+        drawGrid();
+        drawFood();
+        drawSnake();
+    } 
+    
+    if (hitBottom){
+        head.y = 0;
+        ctx.clearRect(0, 0, sizeCanvas, sizeCanvas);
+        drawGrid();
+        drawFood();
+        drawSnake();
+    } 
+
+    if (hitLeft || hitRight || hitTop || hitBottom || selfCollision) {
         gameOver();
     }
-}
+};
 
 const gameOver = () => {
     showDialog();
     clearInterval(loading);
-    btnReset.addEventListener("click", () => {
-        scoreValue.innerHTML = "00";
-        dialog.close();
-        snake = [initialPosition];
-        direction = "";
-        gameLoading();
-    });
 }
 
 const gameLoading = () => {
@@ -184,6 +205,10 @@ const gameLoading = () => {
         ctx.clearRect(0,0, sizeCanvas, sizeCanvas);
         drawGrid();
         drawFood();
+        if (nextDirection) {
+            direction = nextDirection;
+            nextDirection = "";
+        }
         moveSnake();
         drawSnake();
         checkEat();
