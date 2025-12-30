@@ -5,8 +5,7 @@ const btnReset = document.querySelector(".btnReset");
 const dialog = document.querySelector("dialog");
 const ctx = canvas.getContext("2d");
 // NOTE: Paths in JS like "./images/..." resolve relative to the *page* (index.html),
-// not this file. 
-// Since index.html sits at the project root, we should not use "../".
+// not this file. Since index.html sits at the project root, we should not use "../".
 const audio = new Audio("./assets/bite-audio.mp3");
 const foodImage = new Image();
 foodImage.src = "./images/apple.png";
