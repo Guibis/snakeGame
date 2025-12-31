@@ -190,7 +190,7 @@ const checkCollision = () => {
         drawSnake();
     } 
 
-    if (hitLeft || hitRight || hitTop || hitBottom || selfCollision) {
+    if (selfCollision) {
         gameOver();
     }
 };
@@ -217,3 +217,4 @@ const gameLoading = () => {
 };
 
 gameLoading();
+
